@@ -10,8 +10,8 @@ Active Phase: Validate
 - [x] Validate carousel HTML/CSS/JS locally
 - [x] Fix validation issues through Cursor AI if needed
 - [x] Commit carousel update
-- [/] Redeploy static site to Render
-- [ ] Record successful carousel deployment
+- [x] Redeploy static site to Render
+- [x] Record successful carousel deployment
 
 <!-- Legend: [x] completed · [/] active · [ ] remaining -->
 
@@ -22,4 +22,5 @@ Active Phase: Validate
 - Current Agent Confidence Score: high
 - Update request: Make the services section an animated lateral carousel that continuously slides left, remains smooth, and can be controlled with fingers/touch.
 - Existing deployment: https://padilla-s-construction-website-improved.onrender.com
-- Construct notes: Services grid replaced with infinite left-scrolling track (duplicated cards), pointer drag/swipe + keyboard arrows, reduced auto-speed after interaction, prefers-reduced-motion falls back to static horizontal scroll. Deployment not marked complete.
+- Construct notes: Services grid replaced with infinite left-scrolling track (duplicated cards), pointer drag/swipe + keyboard arrows, reduced auto-speed after interaction, prefers-reduced-motion falls back to static horizontal scroll.
+- Deployment: Live at https://padilla-s-construction-website-improved.onrender.com. Validation passed with 0 errors.
