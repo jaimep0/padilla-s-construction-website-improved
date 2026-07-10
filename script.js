@@ -56,7 +56,7 @@
   });
 
   const revealEls = document.querySelectorAll(
-    ".service-card, .stat, .gallery-item, .process-step, .review, .trust-item"
+    ".stat, .gallery-item, .process-step, .review, .trust-item"
   );
   revealEls.forEach((el) => el.classList.add("reveal"));
 
@@ -135,4 +135,203 @@
       form.reset();
     });
   }
+
+  const initServicesCarousel = () => {
+    const root = document.querySelector("[data-services-carousel]");
+    if (!root) return;
+
+    const viewport = root.querySelector(".services-carousel-viewport");
+    const track = root.querySelector(".services-carousel-track");
+    if (!viewport || !track) return;
+
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+    if (reduceMotion.matches) {
+      root.classList.add("is-static");
+      const hint = root.querySelector(".services-carousel-hint");
+      if (hint) hint.textContent = "Swipe to browse services";
+      return;
+    }
+
+    const originals = Array.from(track.children);
+    if (!originals.length) return;
+
+    originals.forEach((card) => {
+      const clone = card.cloneNode(true);
+      clone.setAttribute("aria-hidden", "true");
+      clone.querySelectorAll("[href], button, input, select, textarea").forEach((el) => {
+        el.setAttribute("tabindex", "-1");
+      });
+      track.appendChild(clone);
+    });
+
+    let offset = 0;
+    let setWidth = 0;
+    const speed = 0.032;
+    let dragging = false;
+    let running = true;
+    let pointerId = null;
+    let startX = 0;
+    let startOffset = 0;
+    let lastX = 0;
+    let lastMoveTime = 0;
+    let velocity = 0;
+    let lastTs = null;
+    let resumeAt = 0;
+    let moved = false;
+    let rafId = 0;
+
+    const measure = () => {
+      if (!track.children[0]) {
+        setWidth = 0;
+        return;
+      }
+      const styles = getComputedStyle(track);
+      const gap = parseFloat(styles.gap) || 0;
+      let width = 0;
+      for (let i = 0; i < originals.length; i += 1) {
+        width += track.children[i].getBoundingClientRect().width;
+        if (i < originals.length - 1) width += gap;
+      }
+      setWidth = width + gap;
+    };
+
+    const wrapOffset = () => {
+      if (setWidth <= 0) return;
+      while (offset <= -setWidth) offset += setWidth;
+      while (offset > 0) offset -= setWidth;
+    };
+
+    const apply = () => {
+      track.style.transform = `translate3d(${offset}px, 0, 0)`;
+    };
+
+    const pauseInteraction = () => {
+      resumeAt = performance.now() + 900;
+    };
+
+    const onPointerDown = (event) => {
+      if (event.pointerType === "mouse" && event.button !== 0) return;
+      dragging = true;
+      moved = false;
+      pointerId = event.pointerId;
+      startX = event.clientX;
+      lastX = event.clientX;
+      startOffset = offset;
+      velocity = 0;
+      lastMoveTime = performance.now();
+      lastTs = null;
+      viewport.classList.add("is-dragging");
+      try {
+        viewport.setPointerCapture(event.pointerId);
+      } catch (_) {
+        /* ignore */
+      }
+    };
+
+    const onPointerMove = (event) => {
+      if (!dragging || event.pointerId !== pointerId) return;
+      const now = performance.now();
+      const dx = event.clientX - startX;
+      if (Math.abs(dx) > 4) moved = true;
+      offset = startOffset + dx;
+      wrapOffset();
+      apply();
+
+      const dt = Math.max(now - lastMoveTime, 1);
+      velocity = ((event.clientX - lastX) / dt) * 16;
+      lastX = event.clientX;
+      lastMoveTime = now;
+    };
+
+    const endDrag = (event) => {
+      if (!dragging || (event && event.pointerId !== pointerId)) return;
+      dragging = false;
+      pointerId = null;
+      viewport.classList.remove("is-dragging");
+      pauseInteraction();
+
+      if (Math.abs(velocity) > 0.2) {
+        offset += velocity * 8;
+        wrapOffset();
+        apply();
+      }
+      velocity = 0;
+      lastTs = null;
+    };
+
+    viewport.addEventListener("pointerdown", onPointerDown);
+    viewport.addEventListener("pointermove", onPointerMove);
+    viewport.addEventListener("pointerup", endDrag);
+    viewport.addEventListener("pointercancel", endDrag);
+    viewport.addEventListener("lostpointercapture", endDrag);
+
+    viewport.addEventListener(
+      "click",
+      (event) => {
+        if (moved) {
+          event.preventDefault();
+          event.stopPropagation();
+          moved = false;
+        }
+      },
+      true
+    );
+
+    viewport.addEventListener("keydown", (event) => {
+      if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return;
+      event.preventDefault();
+      const step = Math.min(viewport.clientWidth * 0.7, 280);
+      offset += event.key === "ArrowLeft" ? step : -step;
+      wrapOffset();
+      apply();
+      pauseInteraction();
+      lastTs = null;
+    });
+
+    const tick = (ts) => {
+      if (!running) return;
+      if (lastTs == null) lastTs = ts;
+      const dt = Math.min(ts - lastTs, 40);
+      lastTs = ts;
+
+      if (!dragging && setWidth > 0) {
+        const interacting = ts < resumeAt;
+        const currentSpeed = interacting ? speed * 0.18 : speed;
+        offset -= currentSpeed * dt;
+        wrapOffset();
+        apply();
+      }
+
+      rafId = requestAnimationFrame(tick);
+    };
+
+    measure();
+    apply();
+    rafId = requestAnimationFrame(tick);
+
+    let resizeTimer = null;
+    window.addEventListener("resize", () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        const ratio = setWidth > 0 ? offset / setWidth : 0;
+        measure();
+        offset = ratio * setWidth;
+        wrapOffset();
+        apply();
+      }, 120);
+    });
+
+    reduceMotion.addEventListener("change", (event) => {
+      if (!event.matches) return;
+      running = false;
+      cancelAnimationFrame(rafId);
+      root.classList.add("is-static");
+      track.style.transform = "";
+      const hint = root.querySelector(".services-carousel-hint");
+      if (hint) hint.textContent = "Swipe to browse services";
+    });
+  };
+
+  initServicesCarousel();
 })();

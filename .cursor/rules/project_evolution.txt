@@ -41,3 +41,21 @@ Entry format (append-only, newest at the bottom):
   - Prompt Tokens: n/a | Completion Tokens: n/a
   - Cost Metric / Notes: n/a
 ────────────────────────────────────────────────────────────────────────────────
+
+[2026-07-10 04:22:00] - PHASE: Construct
+- Modified Files: index.html, styles.css, script.js, .cursor/rules/workflow_state.md
+- Rationale: Converted services grid into an infinite left-scrolling lateral carousel with duplicated track items, pointer drag/swipe and keyboard control, slowed auto-scroll during/after interaction, and prefers-reduced-motion static scroll fallback while preserving service content and visual polish.
+- Execution Agent: Cursor AI
+- Telemetry Profile:
+  - Prompt Tokens: n/a | Completion Tokens: n/a
+  - Cost Metric / Notes: Services carousel construct pass; deployment not marked complete
+────────────────────────────────────────────────────────────────────────────────
+
+[2026-07-10 04:24:47] - PHASE: Construct
+- Modified Files: index.html, styles.css, script.js
+- Rationale: Converted the services section into a continuously left-scrolling infinite carousel with touch/drag control, keyboard support, and reduced-motion handling.
+- Execution Agent: Cursor AI
+- Telemetry Profile:
+  - Prompt Tokens: n/a | Completion Tokens: n/a
+  - Cost Metric / Notes: n/a
+────────────────────────────────────────────────────────────────────────────────
