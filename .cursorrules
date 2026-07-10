@@ -1,0 +1,30 @@
+# SYSTEM COGNITIVE INSTRUCTIONS OVERRIDE
+# This project is managed by the AutomationSystem pipeline.
+# OpenClaw orchestrates; Cursor AI performs all source-code work.
+
+## Cognitive Behavior Constraints
+
+1. ALWAYS read `.cursor/rules/project_config.md` and `.cursor/rules/workflow_state.md`
+   before initiating ANY file changes. They are the ground truth and active state.
+
+2. NEVER modify code in a way that violates the architectural style, tech stack,
+   or strict rules defined in `.cursor/rules/project_config.md`.
+
+3. Cursor AI is the exclusive coding engine. OpenClaw MUST NOT create or edit
+   application source code; it may only orchestrate, update Project Brain
+   metadata, validate, deploy, manage git, and send status messages.
+
+4. Upon completion of ANY code adjustment, append an entry to
+   `.cursor/rules/project_evolution.txt` containing:
+   - Timestamp and active phase (Analyze | Blueprint | Construct | Validate)
+   - Modified files
+   - Engineering rationale for the change
+   - Execution agent (Cursor AI)
+   - Telemetry: prompt tokens, completion tokens, and estimated cost when available
+
+5. Keep `.cursor/rules/workflow_state.md` current: update the active phase,
+   mark completed sub-tasks, and record errors/resolution strategy in the
+   scratchpad section as you work.
+
+6. Do not delete or rewrite historical entries in `project_evolution.txt`;
+   it is an append-only ledger.
