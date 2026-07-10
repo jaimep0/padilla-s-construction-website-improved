@@ -10,15 +10,19 @@
 
 ## 2. Tech Stack & Dependencies
 
-- Frontend: {{FRONTEND_STACK}}
-- Backend: {{BACKEND_STACK}}
-- Databases: {{DATABASES}}
+- Frontend: Static HTML, CSS, and vanilla JavaScript. No framework required.
+- Backend: None.
+- Databases: None.
 
 ## 3. Strict Architectural Rules
 
-- {{ARCHITECTURAL_RULE_1}}
+- Build as a deployable static marketing website with semantic HTML, accessible navigation, responsive layout, and no build step.
 - Maintain absolute type safety with strict TypeScript compilation (if TypeScript is used).
-- Design Patterns: {{DESIGN_PATTERNS}}
+- Preserve Padilla's Construction business content from the reference site: premium residential masonry, stone veneer, chimneys, brick repair, retaining walls, tuckpointing, restoration, Chicago service area, phone CTA, email CTA, 4.7 rating / 18 Google reviews proof.
+- Improve conversion with clear above-the-fold value proposition, prominent estimate/call CTAs, service cards, trust metrics, process section, project-quality proof, testimonials, service area, and a complete contact section.
+- Use real masonry/construction photography from stable remote URLs when appropriate; avoid purely decorative SVG hero art.
+- Avoid broken internal navigation: for a one-page site, use anchored section links instead of missing route pages.
+- Design Patterns: One-page contractor landing page, semantic sections, responsive CSS grid/flex layouts, progressive enhancement with small JavaScript for menu and scroll behavior.
 
 ## 4. Global Developer Profile (injected at init)
 
