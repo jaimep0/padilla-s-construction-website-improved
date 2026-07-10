@@ -56,7 +56,7 @@
   });
 
   const revealEls = document.querySelectorAll(
-    ".stat, .gallery-item, .process-step, .review, .trust-item"
+    ".stat, .process-step, .review, .trust-item"
   );
   revealEls.forEach((el) => el.classList.add("reveal"));
 
@@ -136,20 +136,28 @@
     });
   }
 
-  const initServicesCarousel = () => {
-    const root = document.querySelector("[data-services-carousel]");
+  const initInfiniteCarousel = ({
+    root,
+    viewportSelector,
+    trackSelector,
+    hintSelector,
+    staticHintText,
+  }) => {
     if (!root) return;
 
-    const viewport = root.querySelector(".services-carousel-viewport");
-    const track = root.querySelector(".services-carousel-track");
+    const viewport = root.querySelector(viewportSelector);
+    const track = root.querySelector(trackSelector);
     if (!viewport || !track) return;
 
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const setStaticHint = () => {
+      const hint = root.querySelector(hintSelector);
+      if (hint) hint.textContent = staticHintText;
+    };
 
     if (reduceMotion.matches) {
       root.classList.add("is-static");
-      const hint = root.querySelector(".services-carousel-hint");
-      if (hint) hint.textContent = "Swipe to browse services";
+      setStaticHint();
       return;
     }
 
@@ -328,10 +336,23 @@
       cancelAnimationFrame(rafId);
       root.classList.add("is-static");
       track.style.transform = "";
-      const hint = root.querySelector(".services-carousel-hint");
-      if (hint) hint.textContent = "Swipe to browse services";
+      setStaticHint();
     });
   };
 
-  initServicesCarousel();
+  initInfiniteCarousel({
+    root: document.querySelector("[data-services-carousel]"),
+    viewportSelector: ".services-carousel-viewport",
+    trackSelector: ".services-carousel-track",
+    hintSelector: ".services-carousel-hint",
+    staticHintText: "Swipe to browse services",
+  });
+
+  initInfiniteCarousel({
+    root: document.querySelector("[data-projects-carousel]"),
+    viewportSelector: ".projects-carousel-viewport",
+    trackSelector: ".projects-carousel-track",
+    hintSelector: ".projects-carousel-hint",
+    staticHintText: "Swipe to browse projects",
+  });
 })();

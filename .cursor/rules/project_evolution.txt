@@ -68,3 +68,21 @@ Entry format (append-only, newest at the bottom):
   - Prompt Tokens: n/a | Completion Tokens: n/a
   - Cost Metric / Notes: n/a
 ────────────────────────────────────────────────────────────────────────────────
+
+[2026-07-10 04:29:00] - PHASE: Construct
+- Modified Files: index.html, styles.css, script.js, .cursor/rules/workflow_state.md
+- Rationale: Converted the Projects gallery into the same infinite left-scrolling lateral carousel as Services—duplicated track items, pointer drag/swipe, keyboard arrows, slowed auto-scroll after interaction, and prefers-reduced-motion static scroll—while preserving project image captions and extracting a shared initInfiniteCarousel helper so both sections stay in sync without breaking services.
+- Execution Agent: Cursor AI
+- Telemetry Profile:
+  - Prompt Tokens: n/a | Completion Tokens: n/a
+  - Cost Metric / Notes: Projects carousel construct pass; deployment not marked complete
+────────────────────────────────────────────────────────────────────────────────
+
+[2026-07-10 04:31:16] - PHASE: Construct
+- Modified Files: index.html, styles.css, script.js
+- Rationale: Converted the Projects gallery into a continuously left-scrolling infinite carousel with touch/drag control while preserving the existing Services carousel.
+- Execution Agent: Cursor AI
+- Telemetry Profile:
+  - Prompt Tokens: n/a | Completion Tokens: n/a
+  - Cost Metric / Notes: n/a
+────────────────────────────────────────────────────────────────────────────────
